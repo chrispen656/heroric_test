@@ -28,7 +28,8 @@ async function createSession() {
 </script>
 
 <template>
-  <div class="flex flex-row justify-evenly items-center h-screen">
+  <!-- <div class="flex flex-row justify-evenly items-center h-screen"> -->
+  <div class="grid grid-cols-3 h-screen w-screen items-center bg-heroic-light text-white">
     <Welcome msg="Snake!" />
     <SnakeGame></SnakeGame>
     <LeaderBoard></LeaderBoard>

@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+@theme {
+  --color-heroic: #4d48a0;
+  --color-heroic-light: #5b55d5;
+}

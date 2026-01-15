@@ -9,7 +9,7 @@ defineProps<{ msg: string }>()
   
   <img src="../assets/snake.png" alt="Snake Icon" />
 
-  <div class="card">
+  <div class="card text-white">
     <p>
       Welcome to the competitive world of Snake! <br>
       Use the arrow keys to change direction.

@@ -1,13 +1,10 @@
-<template>
-  <div class="game-container">
-    <canvas ref="gameCanvas" width="400" height="400"></canvas>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
 const gameCanvas = ref<HTMLCanvasElement | null>(null);
+const score = ref(0);
+const gameOver = ref(false);
+const username = ref('');
 
 interface Position {
   x: number;
@@ -99,6 +96,7 @@ function loop() {
     // snake ate apple
     if (cell.x === apple.x && cell.y === apple.y) {
       snake.maxCells++;
+      score.value++;
 
       // canvas is 400x400 which is 25x25 grids
       apple.x = getRandomInt(0, 25) * grid;
@@ -109,12 +107,15 @@ function loop() {
     for (let i = index + 1; i < snake.cells.length; i++) {
       // snake occupies same space as a body part. reset game
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+        gameOver.value = true;
+
         snake.x = 160;
         snake.y = 160;
         snake.cells = [];
         snake.maxCells = 4;
         snake.dx = grid;
         snake.dy = 0;
+        score.value = 0;
 
         apple.x = getRandomInt(0, 25) * grid;
         apple.y = getRandomInt(0, 25) * grid;
@@ -160,20 +161,62 @@ onUnmounted(() => {
     cancelAnimationFrame(animationId);
   }
 });
+
+function submitScore() {
+  //placeholder
+}
 </script>
+
+<template>
+  <div class="game-wrapper">
+    <p>Score: {{ score }}</p>
+    <div class="game-container">
+      <canvas ref="gameCanvas" width="400" height="400"></canvas>
+    </div>
+    <div
+        v-if="gameOver"
+        class="absolute inset-0 z-10 flex items-center justify-center bg-black/70"
+      >
+        <div class="w-72 rounded-xl bg-white p-6 shadow-xl">
+          <h2 class="mb-2 text-xl font-bold text-center">
+            Game Over
+          </h2>
+
+          <p class="mb-4 text-center">
+            Your score:
+            <span class="font-semibold">{{ score }}</span>
+          </p>
+
+          <input
+            v-model="username"
+            placeholder="Enter your name"
+            maxlength="16"
+            class="mb-3 w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <button
+            @click="submitScore"
+            :disabled="!username"
+            class="w-full rounded-md bg-blue-600 py-2 font-semibold text-white
+                   hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Submit Score
+          </button>
+        </div>
+      </div>
+  </div>
+</template>
 
 <style scoped>
 .game-container {
   /* height: 100vh; */
   margin: 0;
-  background: rgba(77, 72, 160);
-  display: flex;
   align-items: center;
   justify-content: center;
-  border: 4px solid black;
 }
 
 canvas {
-  border: 1px solid white;
+  border: 4px solid white;
+  background: rgba(77, 72, 160);
 }
 </style>
